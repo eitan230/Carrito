@@ -2,11 +2,12 @@ package Menues;
 
 import java.awt.Menu;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import Usuario.ArtCarrito;
-import Usuario.Articulo;
-import Usuario.Usuario;
+import Clases.ArtCarrito;
+import Clases.Articulo;
+import Clases.Usuario;
 
 public class MenuArticulos {
 	
@@ -23,9 +24,74 @@ public class MenuArticulos {
 		
 	}
 	
+	public int ingresarNumInt() {
+		int numero = 0;
+		boolean numValido = false;
+		do {
+			try {
+				numero = sc.nextInt();
+				numValido = true;
+			} catch (InputMismatchException e) {
+				System.out.println("Error: Debe ingresar un numero, vuelva a intentarlo");
+				sc.nextLine();
+				numValido = false;
+			}
+		} while (!numValido);
+		
+		return numero;
+	}
+	
+	public int ingNumIntMayor0(){
+		int numero = ingresarNumInt();
+		boolean numValido = false;
+		do {
+			if(numero <= 0) {
+				System.out.println("El numero a ingresar debe ser mayor a 0");
+				numero = ingresarNumInt();
+			} else {
+				numValido = true;
+			}
+		} while (!numValido);
+		
+		return numero;
+	}
+	
+	public double ingNumDoubMayor0(){
+		double numero = ingresarNumDouble();
+		boolean numValido = false;
+		do {
+			if(numero <= 0) {
+				System.out.println("El numero a ingresar debe ser mayor a 0");
+				numero = ingresarNumDouble();
+			} else {
+				numValido = true;
+			}
+		} while (!numValido);
+		
+		return numero;
+	}
+	
+	public double ingresarNumDouble() {
+		double numero = 0;
+		boolean numValido = false;
+		do {
+			try {
+				numero = sc.nextDouble();
+				numValido = true;
+			} catch (InputMismatchException e) {
+				System.out.println("Error: Debe ingresar un numero, vuelva a intentarlo");
+				sc.nextLine();
+				numValido = false;
+			}
+		} while (!numValido);
+		
+		return numero;
+	}
+	
 	public void agregarArticulos(){
 		System.out.println("Ingrese el codigo del articulo");
-		int codigoArt = sc.nextInt();
+		int codigoArt = ingresarNumInt();
+
 		boolean continuar = true;
 		
 		do {
@@ -39,7 +105,7 @@ public class MenuArticulos {
 		
 			if(existe) {
 				System.out.println("Ya existe un articulo con ese codigo, ingresa un codigo de articulo distinto");
-				codigoArt = sc.nextInt();
+				codigoArt = ingresarNumInt();
 			} else {
 				continuar = false;
 			}
@@ -49,33 +115,33 @@ public class MenuArticulos {
 		
 		System.out.println("Ingrese el nombre del articulo");
 		String nombreArt = sc.next().toLowerCase();
+		continuar = true;
+		
+		do {
+			boolean existe = false;
+				for (Articulo articulo : articulos) {
+					if(articulo.getNombre().equals(nombreArt)) {
+						existe = true;
+						break;
+					}
+				}
+			
+				if(existe) {
+					System.out.println("Ya existe un articulo con ese nombre, ingrese un nombre distinto");
+					nombreArt = sc.next();
+				} else {
+					continuar = false;
+				}
+				
+			} while (continuar);
+		
 		
 		System.out.println("Ingrese el precio del articulo");
-		double precioArt = sc.nextDouble();
-		continuar = true;
-		do {
-			if(precioArt <= 0) {
-				System.out.println("Ingrese un precio superior a 0");
-				precioArt = sc.nextDouble();
-			} else {
-				continuar = false;
-			}
-			
-		} while (continuar);
-		
+		double precioArt = ingNumDoubMayor0();		
 		
 		System.out.println("Ingrese el stock del articulo");
-		int stockArt = sc.nextInt();
-		continuar = true;
-		do {
-			if(stockArt <= 0) {
-				System.out.println("Ingrese un stock superior a 0");
-				stockArt = sc.nextInt();
-			} else {
-				continuar = false;
-			}
-			
-		} while (continuar);
+		int stockArt = ingNumIntMayor0();
+
 		
 		Articulo art = new Articulo(codigoArt, nombreArt, precioArt, stockArt);
 		
@@ -118,22 +184,22 @@ public class MenuArticulos {
 		System.out.println("2 - Nombre");
 		System.out.println("3 - Precio");
 		System.out.println("4 - Stock");
-		int opcion = sc.nextInt();
+		int opcion = ingresarNumInt();
 		
 		for (Articulo articulo : articulos) {
 			if(articulo.getNombre().equals(artBorrar)) {
 				switch (opcion) {
 				case 1:
-					articulo.setCodArticulo(sc.nextInt());
+					articulo.setCodArticulo(ingresarNumInt());
 					break;
 				case 2:
 					articulo.setNombre(sc.next());
 					break;
 				case 3:
-					articulo.setPrecio(sc.nextDouble());
+					articulo.setPrecio(ingresarNumDouble());
 					break;
 				case 4:
-					articulo.setStock(sc.nextInt());
+					articulo.setStock(ingresarNumInt());
 					break;
 				default:
 					System.out.println("Opcion incorrecta");
@@ -170,18 +236,18 @@ public class MenuArticulos {
 					if(articulo.getArt().hayStock()) {
 						System.out.println("\nYa posee este articulo en su carrito, desea agregar mas cantidad del mismo?");
 						System.out.println("1 - Si\n2 - No\n");
-						int opcion = sc.nextInt();
+						int opcion = ingresarNumInt();
 						switch (opcion) {
 						case 1:
 							System.out.println("\nIngrese la cantidad del producto que desea agregar");
-							int cantAgregar = sc.nextInt();							
+							int cantAgregar = ingNumIntMayor0();							
 							do {
 								if(articulo.getArt().corroborarStock(cantAgregar)) {
 									articulo.agregarCantidad(cantAgregar);
 									continuar = false;
 								} else {
 									System.out.println("El stock solicitado del producto no es suficiente, ingrese una cantidad menor o igual a " + articulo.getArt().getStock());
-									cantAgregar = sc.nextInt();
+									cantAgregar = ingNumIntMayor0();
 									continuar = true;
 								}
 							} while (continuar);
@@ -211,7 +277,7 @@ public class MenuArticulos {
 		for (Articulo articulo : articulos) {
 			if(articulo.getNombre().equals(artDeseado)) {
 					System.out.println("Ingrese la cantidad que desea comprar");
-					int cantidad = sc.nextInt();
+					int cantidad = ingNumIntMayor0();
 					boolean corroborar = true;
 					do {
 						if(articulo.corroborarStock(cantidad)) {
@@ -224,7 +290,7 @@ public class MenuArticulos {
 							existe = true;
 						} else {
 							System.out.println("Lo siento, no poseemos suficiente stock para la cantidad solicitada, ingrese una cantidad menor");
-							cantidad = sc.nextInt();
+							cantidad = ingNumIntMayor0();
 						}
 					} while (corroborar);
 					break;										
@@ -234,10 +300,10 @@ public class MenuArticulos {
 			
 		}
 		
-		if(!existe) {
-			System.out.println("El articulo solicitado no existe o su nombre esta mal escrito, vuelva a intentarlo");
-			artDeseado = sc.next();
-		}
+			if(!existe) {
+				System.out.println("El articulo solicitado no existe o su nombre esta mal escrito, vuelva a intentarlo");
+				artDeseado = sc.next();
+			}
 		}
 	}
 	
@@ -324,6 +390,7 @@ public class MenuArticulos {
 		}
 		
 	}
+	
 	public void limpiarCarrito() {
 		if(carrito.size() != 0 ) {
 			for (ArtCarrito articulo : carrito) {
@@ -333,8 +400,6 @@ public class MenuArticulos {
 		
 		carrito.clear();
 	}
-	
-
 	
 	public Usuario getUsuLogueado() {
 		return usuLogueado;

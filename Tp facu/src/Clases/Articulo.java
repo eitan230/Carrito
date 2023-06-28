@@ -1,4 +1,4 @@
-package Usuario;
+package Clases;
 
 public class Articulo {
 	private int codArticulo;

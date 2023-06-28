@@ -3,8 +3,8 @@ package Menues;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import Usuario.ArtCarrito;
-import Usuario.Articulo;
+import Clases.ArtCarrito;
+import Clases.Articulo;
 
 public class MenuCarrito {
 	

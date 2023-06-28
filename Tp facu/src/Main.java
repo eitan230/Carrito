@@ -1,11 +1,11 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import Clases.ArtCarrito;
+import Clases.Articulo;
+import Clases.Usuario;
 import Menues.MenuArticulos;
 import Menues.MenuUsuarios;
-import Usuario.ArtCarrito;
-import Usuario.Articulo;
-import Usuario.Usuario;
 
 public class Main {
 	

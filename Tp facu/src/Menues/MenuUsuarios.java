@@ -1,10 +1,11 @@
 package Menues;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import Usuario.Articulo;
-import Usuario.Usuario;
+import Clases.Articulo;
+import Clases.Usuario;
 
 public class MenuUsuarios {
 	private Scanner sc;
@@ -22,22 +23,73 @@ public class MenuUsuarios {
 		this.codigoComercio = codigo;
 	}
 	
+	public int ingresarNumInt() {
+		int numero = 0;
+		boolean numValido = false;
+		do {
+			try {
+				numero = sc.nextInt();
+				numValido = true;
+			} catch (InputMismatchException e) {
+				System.out.println("Error: Debe ingresar un numero, vuelva a intentarlo");
+				sc.nextLine();
+				numValido = false;
+			}
+		} while (!numValido);
+		
+		return numero;
+	}
+	
+	public double ingresarNumDouble() {
+		double numero = 0;
+		boolean numValido = false;
+		do {
+			try {
+				numero = sc.nextDouble();
+				numValido = true;
+			} catch (InputMismatchException e) {
+				System.out.println("Error: Debe ingresar un numero, vuelva a intentarlo");
+				sc.nextLine();
+				numValido = false;
+			}
+		} while (!numValido);
+		
+		return numero;
+	}
+	
+	public long ingresarNumLong() {
+		long numero = 0;
+		boolean numValido = false;
+		do {
+			try {
+				numero = sc.nextLong();
+				numValido = true;
+			} catch (InputMismatchException e) {
+				System.out.println("Error: Debe ingresar un numero, vuelva a intentarlo");
+				sc.nextLine();
+				numValido = false;
+			}
+		} while (!numValido);
+		
+		return numero;
+	}
+	
 	public void registrar() {
     	System.out.println("Que tipo de usuario quiere registrarse");
     	System.out.println("1 - Cliente");
     	System.out.println("2 - Empleado");
-    	int opcion = sc.nextInt();
+    	int opcion = ingresarNumInt();
     	String tipoUsuario = "";
     	if(opcion == 1) {
     		tipoUsuario = "Cliente";
     	} else if (opcion == 2){
     		System.out.println("Para registrarse como empleado necesita del codigo de comercio, ingreselo a continuacion: ");
-    		int codComercio = sc.nextInt();
+    		int codComercio = ingresarNumInt();
     		boolean continuar = true;
     		do {
 				if(codComercio != this.codigoComercio) {
 					System.out.println("Codigo de comercio incorrecto, vuelva a intentarlo");
-					codComercio = sc.nextInt();
+					codComercio = ingresarNumInt();
 				} else {
 					continuar = false;
 				}
@@ -71,12 +123,12 @@ public class MenuUsuarios {
 		} while (continuar);
     	
     	System.out.println("Ingrese una contraseña");
-    	long contraseña = sc.nextLong();
+    	long contraseña = ingresarNumLong();
     	continuar = true;
     	do {
 			if(contraseña <= 100 || contraseña > 999999999) {
 				System.out.println("Ingrese una contraseña de entre 3 a 9 digitos");
-				contraseña = sc.nextLong();
+				contraseña = ingresarNumLong();
 			} else {
 				continuar = false;
 			}
@@ -118,7 +170,7 @@ public class MenuUsuarios {
 		}
 		
 		System.out.println("\nIngrese su contraseña\n");
-		int contraseña = sc.nextInt();
+		long contraseña = ingresarNumLong();
 		continuar = true;
 		while(continuar) {
 			if(usuEncontrado.getContraseña() == contraseña) {
@@ -130,7 +182,7 @@ public class MenuUsuarios {
 				
 			} else {
 				System.out.println("\nContraseña incorrecta vuelva a intentarlo");
-				contraseña = sc.nextInt();
+				contraseña = ingresarNumLong();
 			}
 		}
 		
@@ -142,7 +194,7 @@ public class MenuUsuarios {
 	
 	public void depositarDinero() {
 		System.out.println("Ingrese el monto que desea depositar");
-		double monto = sc.nextDouble();
+		double monto = ingresarNumDouble();
 		if(monto > 0) {
 			usuLogueado.deposita(monto);
 		} else {
@@ -162,7 +214,7 @@ public class MenuUsuarios {
 			for (Usuario usuario : usuarios) {
 				if(usuario.getUsuario().equals(usuTransferir)) {
 					System.out.println("Ingrese el monto que desea tranferir");
-					double monto = sc.nextDouble();
+					double monto = ingresarNumDouble();
 					usuLogueado.transferir(monto, usuario);
 					existe = true;
 					continuar = false;

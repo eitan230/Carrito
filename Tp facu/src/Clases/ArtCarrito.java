@@ -1,4 +1,4 @@
-package Usuario;
+package Clases;
 
 public class ArtCarrito {
 	private Articulo art;
@@ -32,7 +32,7 @@ public class ArtCarrito {
 
 	@Override
 	public String toString() {
-		return "Articulo: " + art.getNombre() + "\nCantidad:" + cantidad;
+		return "Articulo: " + art.getNombre() + "\nCantidad:" + cantidad + "\n";
 	}
 	
 	
